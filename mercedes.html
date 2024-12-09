@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mercedes-Benz luxury car rentals with BIK.">
+    <meta name="keyword" content="Rent-Mercedes-Benz, Mercedes-S-Class-rental, Mercedes-G-Wagon-rental, Rent-Mercedes-for-a-day">
+    <title>Mercedes-Benz - Luxury Car Rentals</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="ferrari.html">Ferrari</a></li>
+                <li><a href="lamborghini.html">Lamborghini</a></li>
+                <li><a href="bentley.html">Bentley</a></li>
+                <li><a href="porsche.html">Porsche</a></li>
+                <li><a href="rolls-royce.html">Rolls-Royce</a></li>
+                <li><a href="audi.html">Audi</a></li>
+                <li><a href="bmw.html">BMW</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="car-details" class="car-details">
+        <h2>Mercedes-Benz Models</h2>
+        <br>
+
+        <div class="car-row">
+            <div class="car-image">
+                <img src="/media/MBenzGclass.jpg" alt="Mercedes-Benz G-Class"title="Mercedes-G-Wagon-rental">
+                <h3> Mercedes-Benz G-Class </h3>
+            <p>Price: $600/day</p>
+            <button class="rent-button" onclick="showPopup(600)">Book</button>
+            </div>
+            <div class="car-image">
+                <img src="/media/mercedesbenzSclass.webp" alt="Mercedes-Benz S-Class"title=" Mercedes-S-Class-rental">
+                <p>Experience excellence with our <strong>Mercedes-Benz S-Class </strong>.</p>
+                <h3>Mercedes-Benz S-Class</h3>
+            <p>Price: $650/day</p>
+            <button class="rent-button" onclick="showPopup(650)">Book</button>
+            </div>
+            <div class="car-image">
+                <img src="/media/MercedesAMGGLECOUPEMP.webp" alt="Mercedes-Benz GLE 53 AMG Coupe">
+                <h3>Mercedes-Benz GLE 53 AMG Coupe</h3>
+            <p>Price: $1000/day</p>
+            <button class="rent-button" onclick="showPopup(1000)">Book</button>
+            </div>
+            
+            
+            
+        </div>
+    </div>
+        
+    </section>
+
+    <footer>
+        <p>&copy; 2024 BIK Luxury Cars. All rights reserved.</p>
+    </footer>
+     <!-- The Pop-up Window -->
+    <div id="rentPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h2>Rental Information</h2>
+
+            <!-- Form in the Pop-up -->
+            <form onsubmit="handleConfirm(event)">
+                <label for="pickupDate">Pickup Date:</label>
+                <input type="date" id="pickupDate" name="pickupDate" required>
+
+                <label for="dropOffDate">Drop Off Date:</label>
+                <input type="date" id="dropOffDate" name="dropOffDate" required>
+
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label>Do you need a Baby Seat ($50/day)?</label>
+                <div class="radio-label">
+                    <div class="inline-label">
+                        <input type="radio" id="babySeatYes" name="babySeat" value="yes" onchange="updateTotals()"> Yes
+                    </div>
+                    <div class="inline-label">
+                        <input type="radio" id="babySeatNo" name="babySeat" value="no" onchange="updateTotals()" checked> No
+                    </div>
+                </div>
+
+                <div class="radio-label">
+                    <label for="payLater">Pay Later</label>
+                    <input type="radio" id="payLater" name="payment" value="later" onchange="updateTotals()" checked>
+                </div>
+                <div class="discount">Get 5% Discount if you pay now</div><div class="radio-label">
+                    <label for="payNow">Pay Now</label>
+                    <input type="radio" id="payNow" name="payment" value="now" onchange="updateTotals()">
+                </div>
+
+                <div class="total-field">Subtotal: <span id="subtotal">0 $</span></div>
+                <div class="total-field">Total: <span id="total">0 $</span></div>
+
+                <button type="submit" id="confirmBtn">Confirm</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Pop-up Message -->
+    <div id="confirmationMessage" class="popup" style="display: none;">
+        <div class="popup-content">
+            <p>Thankyou for booking!<br> We have received your request and will contact you shortly.</p>
+        </div>
+    </div>
+
+    <!-- JavaScript for Pop-up Functionality -->
+    <script>
+        let currentBasePrice = 0;
+        function showPopup(basePrice) {
+            currentBasePrice = basePrice;
+            document.getElementById("rentPopup").style.display = "block";
+            updateTotals();
+        }
+    
+        function closePopup() {
+            document.getElementById("rentPopup").style.display = "none";
+        }
+    
+        function updateTotals() {
+            const pickupDate = document.getElementById("pickupDate").value;
+            const dropOffDate = document.getElementById("dropOffDate").value;
+    
+            // Calculate the difference in days
+            let days = 1;
+            if (pickupDate && dropOffDate) {
+                const startDate = new Date(pickupDate);
+                const endDate = new Date(dropOffDate);
+                const timeDifference = endDate - startDate;
+                days = Math.max(timeDifference / (1000 * 60 * 60 * 24), 1); // Ensure at least 1 day
+            }
+    
+            const babySeatCost = document.getElementById("babySeatYes").checked ? 50 * days : 0;
+            const subtotal = currentBasePrice * days + babySeatCost;
+            const total = document.querySelector('input[name="payment"]:checked').value === "now" ? 
+                subtotal * 0.95 : subtotal; // Apply discount if 'Pay Now'
+    
+            document.getElementById("subtotal").innerText = subtotal.toFixed(2) + " $";
+            document.getElementById("total").innerText = total.toFixed(2) + " $";
+        }
+    
+        window.onclick = function(event) {
+            const popup = document.getElementById("rentPopup");
+            if (event.target == popup) {
+                closePopup();
+            }
+        }
+        function handleConfirm(event) {
+            event.preventDefault();
+            closePopup();
+    
+            const confirmationMessage = document.getElementById("confirmationMessage");
+            confirmationMessage.style.display = "block";
+    
+            setTimeout(() => {
+                confirmationMessage.style.display = "none";
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
