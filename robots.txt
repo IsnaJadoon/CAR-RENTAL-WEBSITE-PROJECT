@@ -1,3 +1,3 @@
 User-agent: *
-Disallow:
+Allow: /sitemap.xml
 Sitemap: https://bik-luxury-car-rentals.netlify.app/sitemap.xml
